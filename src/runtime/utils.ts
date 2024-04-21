@@ -1,3 +1,4 @@
+import type { BundledLanguage } from 'shiki'
 import { ref, watch, toValue, type MaybeRefOrGetter } from 'vue'
 import type { UseHighlightOptions, ShikiHighlighter } from './types'
 import { createHighlighter } from './shiki'
