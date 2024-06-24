@@ -23,7 +23,7 @@
 Add Nuxt module:
 
 ```bash
-npx nuxi module add nuxt-shiki
+npx nuxi module add @zinkawaii/nuxt-shiki
 ```
 
 That's it! You can now use nuxt-shiki in your Nuxt app ✨
@@ -34,7 +34,7 @@ Options can be configured using `shiki` key in `nuxt.config`:
 
 ```js
 export default defineNuxtConfig({
-  modules: ['nuxt-shiki'],
+  modules: ['@zinkawaii/nuxt-shiki'],
   shiki: {
     /* shiki options */
   },
@@ -102,17 +102,28 @@ export default defineEventHandler(async (event) => {
 })
 ```
 
-### `loadShikiLanguages(highlighter)`
+### `loadShikiLanguages()`
 
-Dynamically loading languages when options.dynamic is true.
+Dynamically loading languages when `options.dynamic` is true.
 
 **Example:**
 
 ```vue
 <script setup>
-const highlighter = await getShikiHighlighter()
-await loadShikiLanguages(highlighter, "tsx", "vue");
+await loadShikiLanguages("tsx", "vue")
 </script>
+```
+
+### `resolveShikiOptions(highlightOptions)`
+
+Resolve `highlightOptions` with defaults.
+
+**Example:**
+
+```
+const shiki = await getShikiHighlighter()
+const options = await resolveShikiOptions({ lang: 'js' })
+const hast = shiki.codeToHast(`const hello = 'shiki'`, options)
 ```
 
 ### `useShikiHighlighted(code, options)`
