@@ -70,6 +70,10 @@ export default defineNuxtModule<ModuleOptions>({
         from: resolver.resolve("./runtime/utils")
       },
       {
+        name: "resolveShikiOptions",
+        from: resolver.resolve("./runtime/utils")
+      },
+      {
         name: "useShikiHighlighted",
         from: resolver.resolve("./runtime/utils")
       }
@@ -77,6 +81,10 @@ export default defineNuxtModule<ModuleOptions>({
     addServerImports([
       {
         name: "getShikiHighlighter",
+        from: resolver.resolve("./runtime/utils")
+      },
+      {
+        name: "resolveShikiOptions",
         from: resolver.resolve("./runtime/utils")
       }
     ]);

@@ -1,7 +1,7 @@
-import type { BundledLanguage } from "shiki";
+import type { BundledLanguage, CodeToHastOptions } from "shiki";
 import { type MaybeRefOrGetter, ref, toValue, watch } from "vue";
-import type { ShikiHighlighter, UseHighlightOptions } from "./types";
-import { createHighlighter } from "./shiki";
+import { createHighlighter, createOptions, resolveOptions } from "./shiki";
+import type { HighlightOptions, ShikiHighlighter, UseHighlightOptions } from "./types";
 
 /**
  * Lazy-load shiki instance.
@@ -26,10 +26,22 @@ import { createHighlighter } from "./shiki";
  * ```
  */
 export async function getShikiHighlighter(): Promise<ShikiHighlighter> {
-  return createHighlighter(
-    import("shiki-options.mjs").then((m) => m.shikiOptions),
-    "_internal"
-  );
+  return createHighlighter("_instance");
+}
+
+/**
+ * Resolve `highlightOptions` with defaults.
+ *
+ * @example
+ * ```
+ * const shiki = await getShikiHighlighter()
+ * const options = await resolveShikiOptions({ lang: 'js' })
+ * const hast = shiki.codeToHast(`const hello = 'shiki'`, options)
+ * ```
+ */
+export async function resolveShikiOptions(highlightOptions: HighlightOptions = {}): Promise<CodeToHastOptions> {
+  const shikiOptions = await createOptions("_options");
+  return resolveOptions(shikiOptions, highlightOptions);
 }
 
 /**
