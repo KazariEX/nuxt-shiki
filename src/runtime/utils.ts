@@ -82,21 +82,18 @@ export async function useShikiHighlighted(
 }
 
 /**
- * Dynamically loading languages when options.dynamic is true.
+ * Dynamically loading languages when `options.dynamic` is true.
  *
  * @example
  * ```vue
  * <script setup>
- * const highlighter = await getShikiHighlighter()
- * await loadShikiLanguages(highlighter, "tsx", "vue");
+ * await loadShikiLanguages("tsx", "vue")
  * </script>
  * ```
  */
-export async function loadShikiLanguages(
-  highlighter: ShikiHighlighter,
-  ...langs: string[]
-) {
+export async function loadShikiLanguages(...langs: string[]) {
   const { bundledLanguages } = await import("shiki/langs");
+  const highlighter = await getShikiHighlighter();
   const loadedLanguages = highlighter.getLoadedLanguages();
   await Promise.all(
     langs
