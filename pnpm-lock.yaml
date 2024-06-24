@@ -31,8 +31,8 @@ importers:
         specifier: ^0.3.13
         version: 0.3.13(eslint@9.5.0)(typescript@5.5.2)
       '@nuxt/module-builder':
-        specifier: ^0.8.0
-        version: 0.8.0(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@3.29.4))(nuxi@3.12.0)(typescript@5.5.2)
+        specifier: ^0.5.5
+        version: 0.5.5(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@3.29.4))(nuxi@3.12.0)(typescript@5.5.2)
       '@nuxt/schema':
         specifier: ^3.12.2
         version: 3.12.2(rollup@3.29.4)
@@ -916,12 +916,12 @@ packages:
     resolution: {integrity: sha512-5kOqEzfc3FsAncjK2je7vuq4/QsR5ypViTnop52mlFLf0Ku1NMCrWCSWYowAh4P0yqTACMAZYa+HdRZHscU84g==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
-  '@nuxt/module-builder@0.8.0':
-    resolution: {integrity: sha512-r8zsnTus4I2zv4jbVljTb2DPULfqBTQfUzfCsZUolaTYz/qJW1NfVOd9juVbIJFHJR+4ZQzxoxL9zScjzS0YNg==}
+  '@nuxt/module-builder@0.5.5':
+    resolution: {integrity: sha512-ifFfwA1rbSXSae25RmqA2kAbV3xoShZNrq1yK8VXB/EnIcDn4WiaYR1PytaSxIt5zsvWPn92BJXiIUBiMQZ0hw==}
     hasBin: true
     peerDependencies:
-      '@nuxt/kit': ^3.12.2
-      nuxi: ^3.12.0
+      '@nuxt/kit': ^3.8.2
+      nuxi: ^3.10.0
 
   '@nuxt/schema@3.12.2':
     resolution: {integrity: sha512-IRBuOEPOIe1CANKnO2OUiqZ1Hp/0htPkLaigK7WT6ef/SdIFZUd68Tqqejqy2AFrbgU9G80k3U7eg2XUdaiQlQ==}
@@ -3242,9 +3242,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  magic-regexp@0.8.0:
-    resolution: {integrity: sha512-lOSLWdE156csDYwCTIGiAymOLN7Epu/TU5e/oAnISZfU6qP+pgjkE+xbVjVn3yLPKN8n1G2yIAYTAM5KRk6/ow==}
-
   magic-string-ast@0.6.1:
     resolution: {integrity: sha512-eczKQUDaBpB/mcEqZZNGEUG1FQNsXCuk3uOrCpu6y7qTygIy6jnpqDa62j9MGKSoqlXhM1lCFQv1THuGDQtvUA==}
     engines: {node: '>=16.14.0'}
@@ -4479,16 +4476,6 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
-  tsconfck@3.1.0:
-    resolution: {integrity: sha512-CMjc5zMnyAjcS9sPLytrbFmj89st2g+JYtY/c02ug4Q+CZaAtCgbyviI0n1YvjZE/pzoc6FbNsINS13DOL1B9w==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-    peerDependencies:
-      typescript: ^5.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
@@ -4523,9 +4510,6 @@ packages:
   type-fest@3.13.1:
     resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
     engines: {node: '>=14.16'}
-
-  type-level-regexp@0.1.17:
-    resolution: {integrity: sha512-wTk4DH3cxwk196uGLK/E9pE45aLfeKJacKmcEgEOA/q5dnPGNxXt0cfYdFxb57L+sEpf1oJH4Dnx/pnRcku9jg==}
 
   typescript@5.5.2:
     resolution: {integrity: sha512-NcRtPEOsPFFWjobJEtfihkLCZCXZt/os3zf8nTxjVH3RvTSxjrCamJpbExGvYOF+tFHc3pA65qpdwPbzjohhew==}
@@ -5829,18 +5813,14 @@ snapshots:
       - rollup
       - supports-color
 
-  '@nuxt/module-builder@0.8.0(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@3.29.4))(nuxi@3.12.0)(typescript@5.5.2)':
+  '@nuxt/module-builder@0.5.5(@nuxt/kit@3.12.2(magicast@0.3.4)(rollup@3.29.4))(nuxi@3.12.0)(typescript@5.5.2)':
     dependencies:
       '@nuxt/kit': 3.12.2(magicast@0.3.4)(rollup@3.29.4)
       citty: 0.1.6
       consola: 3.2.3
-      defu: 6.1.4
-      magic-regexp: 0.8.0
       mlly: 1.7.1
       nuxi: 3.12.0
       pathe: 1.1.2
-      pkg-types: 1.1.1
-      tsconfck: 3.1.0(typescript@5.5.2)
       unbuild: 2.0.0(typescript@5.5.2)
     transitivePeerDependencies:
       - sass
@@ -8540,16 +8520,6 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  magic-regexp@0.8.0:
-    dependencies:
-      estree-walker: 3.0.3
-      magic-string: 0.30.10
-      mlly: 1.7.1
-      regexp-tree: 0.1.27
-      type-level-regexp: 0.1.17
-      ufo: 1.5.3
-      unplugin: 1.10.1
-
   magic-string-ast@0.6.1:
     dependencies:
       magic-string: 0.30.10
@@ -10002,10 +9972,6 @@ snapshots:
     dependencies:
       typescript: 5.5.2
 
-  tsconfck@3.1.0(typescript@5.5.2):
-    optionalDependencies:
-      typescript: 5.5.2
-
   tslib@2.6.3: {}
 
   tuf-js@2.2.1:
@@ -10031,8 +9997,6 @@ snapshots:
   type-fest@0.8.1: {}
 
   type-fest@3.13.1: {}
-
-  type-level-regexp@0.1.17: {}
 
   typescript@5.5.2: {}
 
