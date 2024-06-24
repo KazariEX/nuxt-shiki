@@ -1,7 +1,7 @@
-import type { BundledLanguage } from 'shiki'
-import { ref, watch, toValue, type MaybeRefOrGetter } from 'vue'
-import type { UseHighlightOptions, ShikiHighlighter } from './types'
-import { createHighlighter } from './shiki'
+import type { BundledLanguage } from "shiki";
+import { type MaybeRefOrGetter, ref, toValue, watch } from "vue";
+import type { ShikiHighlighter, UseHighlightOptions } from "./types";
+import { createHighlighter } from "./shiki";
 
 /**
  * Lazy-load shiki instance.
@@ -27,9 +27,9 @@ import { createHighlighter } from './shiki'
  */
 export async function getShikiHighlighter(): Promise<ShikiHighlighter> {
   return createHighlighter(
-    import('shiki-options.mjs').then((m) => m.shikiOptions),
-    '_internal',
-  )
+    import("shiki-options.mjs").then((m) => m.shikiOptions),
+    "_internal"
+  );
 }
 
 /**
@@ -45,40 +45,40 @@ export async function getShikiHighlighter(): Promise<ShikiHighlighter> {
  */
 export async function useShikiHighlighted(
   code: MaybeRefOrGetter<string | undefined>,
-  options: UseHighlightOptions = {},
+  options: UseHighlightOptions = {}
 ) {
-  if ('themes' in options && !options.themes) {
-    delete options.themes
+  if ("themes" in options && !options.themes) {
+    delete options.themes;
   }
 
   if (import.meta.server) {
-    const highlighter = await getShikiHighlighter()
-    return ref(highlighter.highlight(toValue(code) || '', {
+    const highlighter = await getShikiHighlighter();
+    return ref(highlighter.highlight(toValue(code) || "", {
       ...options,
       lang: toValue(options.lang),
-      theme: toValue(options.theme),
-    }))
+      theme: toValue(options.theme)
+    }));
   }
 
-  const highlighted = ref(options.highlighted || '')
-  const immediate = !highlighted.value
+  const highlighted = ref(options.highlighted || "");
+  const immediate = !highlighted.value;
 
   watch([
     () => toValue(code),
     () => toValue(options.lang),
-    () => toValue(options.theme),
+    () => toValue(options.theme)
   ], async ([_code, lang, theme]) => {
-    const highlighter = await getShikiHighlighter()
-    highlighted.value = highlighter.highlight(_code || '', {
+    const highlighter = await getShikiHighlighter();
+    highlighted.value = highlighter.highlight(_code || "", {
       ...options,
       lang,
-      theme,
-    })
+      theme
+    });
   }, {
-    immediate,
-  })
+    immediate
+  });
 
-  return highlighted
+  return highlighted;
 }
 
 /**
@@ -105,9 +105,8 @@ export async function loadShikiLanguages(
       .filter(Boolean)
       .map((dynamicLang) => new Promise<void>((resolve) => {
         dynamicLang().then((loadedLang) => {
-          highlighter.loadLanguage(loadedLang).then(() => resolve())
-        })
-      })
-    )
-  )
+          highlighter.loadLanguage(loadedLang).then(() => resolve());
+        });
+      }))
+  );
 }

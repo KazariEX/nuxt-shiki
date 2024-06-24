@@ -1,9 +1,9 @@
 export default defineNuxtConfig({
-  modules: ['../src/module'],
+  modules: ["../src/module"],
   shiki: {
     defaultTheme: {
-      light: 'min-light',
-      dark: 'min-dark',
-    },
-  },
-})
+      light: "min-light",
+      dark: "min-dark"
+    }
+  }
+});

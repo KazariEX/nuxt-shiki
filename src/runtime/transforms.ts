@@ -1,21 +1,21 @@
-import type { ShikiTransformer } from 'shiki'
+import type { ShikiTransformer } from "shiki";
 
 export const unwrapTransformer: ShikiTransformer = {
-  name: 'unwrap',
+  name: "unwrap",
   root: (root) => {
-    const preEl = root.children[0] as any
-    const codeEl = preEl.children[0]
+    const preEl = root.children[0] as any;
+    const codeEl = preEl.children[0];
     return {
-      type: 'root',
+      type: "root",
       children: [
         {
           ...codeEl,
           properties: {
             ...preEl.properties,
-            ...codeEl.properties,
-          },
-        },
-      ],
-    }
-  },
-}
+            ...codeEl.properties
+          }
+        }
+      ]
+    };
+  }
+};

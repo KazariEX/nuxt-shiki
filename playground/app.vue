@@ -2,14 +2,13 @@
 const code = ref<string>(/*js*/ `
 // Try editing in the left panel!
 console.log('Hello, World!')
-`)
-
+`);
 </script>
 
 <template>
   <main>
     <div class="editor">
-      <textarea v-model="code" />
+      <textarea v-model="code" ></textarea>
     </div>
     <div class="highlighted-code">
       <Shiki id="shiki" lang="js" :code="code" />
@@ -26,7 +25,6 @@ body {
 <style>
 /* https://shiki.style/guide/dual-themes#query-based-dark-mode */
 @media (prefers-color-scheme: dark) {
-
   .shiki,
   .shiki span {
     color: var(--shiki-dark) !important;
