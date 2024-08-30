@@ -4,10 +4,8 @@ import {
   addServerImports,
   addTemplate,
   createResolver,
-  defineNuxtModule,
-  useNitro
+  defineNuxtModule
 } from "@nuxt/kit";
-import type { Nuxt } from "@nuxt/schema";
 import type { BundledLanguage, BundledTheme, CodeToHastOptions } from "shiki";
 import { genSafeVariableName } from "knitwork";
 import { name, version } from "../package.json";
@@ -53,9 +51,6 @@ export default defineNuxtModule<ModuleOptions>({
   },
   setup(options, nuxt) {
     const resolver = createResolver(import.meta.url);
-
-    // (until nitro wasm support is in experimental state)
-    addUnwasmSupport(nuxt);
 
     // Add component
     addComponent({
@@ -164,32 +159,3 @@ export const shikiOptions = {
     nuxt.options.alias["shiki-options.mjs"] = template.dst;
   }
 });
-
-function addUnwasmSupport(nuxt: Nuxt) {
-  nuxt.hook("ready", () => {
-    const nitro = useNitro();
-    const addWasmSupport = (_nitro: typeof nitro) => {
-      if (nitro.options.experimental?.wasm) {
-        return;
-      }
-      _nitro.options.externals ||= {};
-      _nitro.options.externals.inline ||= [];
-      _nitro.options.externals.inline.push((id) => id.endsWith(".wasm"));
-      _nitro.options.exportConditions!.push("unwasm");
-      _nitro.options.externals.traceInclude!.push("shiki/dist/core.mjs");
-      _nitro.hooks.hook("rollup:before", async (_, rollupConfig) => {
-        const { rollup: unwasm } = await import("unwasm/plugin");
-        rollupConfig.plugins ||= [];
-        (rollupConfig.plugins as any[]).push(
-          unwasm({
-            ...(_nitro.options.wasm as any)
-          })
-        );
-      });
-    };
-    addWasmSupport(nitro);
-    nitro.hooks.hook("prerender:init", (prerenderer) => {
-      addWasmSupport(prerenderer);
-    });
-  });
-}

@@ -2,7 +2,6 @@ import { unwrapTransformer } from "./transforms";
 import type { HighlightOptions, ShikiHighlighter, ShikiOptions } from "./types";
 
 const _importShikiCore = cached(() => import("shiki/core"));
-const _importWasm = cached(() => import("shiki/wasm"));
 const _importShikiOptions = cached(() => import("shiki-options.mjs"));
 
 const createCacheStore = <T>(args: any[]) => {
@@ -16,15 +15,14 @@ const createCacheStore = <T>(args: any[]) => {
 
 export const createHighlighter = cached<ShikiHighlighter>(
   async () => {
-    const [{ createHighlighterCore }, wasm, { shikiOptions }] = await Promise.all([
+    const [{ createHighlighterCore, createJavaScriptRegexEngine }, { shikiOptions }] = await Promise.all([
       _importShikiCore(),
-      _importWasm(),
       _importShikiOptions()
     ]);
 
     const highlighter = (await createHighlighterCore({
       ...shikiOptions.core,
-      loadWasm: wasm
+      engine: createJavaScriptRegexEngine()
     })) as ShikiHighlighter;
 
     highlighter.highlight = (code, highlightOptions) => {
