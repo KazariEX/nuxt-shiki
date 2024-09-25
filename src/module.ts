@@ -1,10 +1,10 @@
 import {
-  addComponent,
-  addImports,
-  addServerImports,
-  addTemplate,
-  createResolver,
-  defineNuxtModule
+    addComponent,
+    addImports,
+    addServerImports,
+    addTemplate,
+    createResolver,
+    defineNuxtModule
 } from "@nuxt/kit";
 import { genSafeVariableName } from "knitwork";
 import type { BundledLanguage, BundledTheme, CodeToHastOptions } from "shiki";
@@ -12,133 +12,133 @@ import { name, version } from "../package.json";
 import type { HighlightOptions } from "./runtime/types";
 
 export interface ModuleOptions {
-  /** Themes */
-  bundledThemes?: BundledTheme[];
+    /** Themes */
+    bundledThemes?: BundledTheme[];
 
-  /** Languages */
-  bundledLangs?: BundledLanguage[];
+    /** Languages */
+    bundledLangs?: BundledLanguage[];
 
-  /** Default theme */
-  defaultTheme?:
+    /** Default theme */
+    defaultTheme?:
     | BundledTheme
     | Record<"dark" | "light" | (string & object), BundledTheme>;
 
-  /** Default language */
-  defaultLang?: BundledLanguage;
+    /** Default language */
+    defaultLang?: BundledLanguage;
 
-  /** Is dynamic loading enabled */
-  dynamic?: boolean;
+    /** Is dynamic loading enabled */
+    dynamic?: boolean;
 
-  /** Additional highlight options */
-  highlightOptions?: HighlightOptions;
+    /** Additional highlight options */
+    highlightOptions?: HighlightOptions;
 
-  /**
-   * Alias of languages
-   * @example { 'my-lang': 'javascript' }
-   */
-  langAlias?: Record<string, string>;
+    /**
+     * Alias of languages
+     * @example { 'my-lang': 'javascript' }
+     */
+    langAlias?: Record<string, string>;
 }
 
 export default defineNuxtModule<ModuleOptions>({
-  meta: {
-    name,
-    version,
-    configKey: "shiki"
-  },
-  defaults: {
-    bundledLangs: ["typescript", "javascript", "json"],
-    bundledThemes: ["min-light", "min-dark"]
-  },
-  setup(options, nuxt) {
-    const resolver = createResolver(import.meta.url);
+    meta: {
+        name,
+        version,
+        configKey: "shiki"
+    },
+    defaults: {
+        bundledLangs: ["typescript", "javascript", "json"],
+        bundledThemes: ["min-light", "min-dark"]
+    },
+    setup(options, nuxt) {
+        const resolver = createResolver(import.meta.url);
 
-    // Add component
-    addComponent({
-      filePath: resolver.resolve("./runtime/component"),
-      name: "Shiki"
-    });
+        // Add component
+        addComponent({
+            filePath: resolver.resolve("./runtime/component"),
+            name: "Shiki"
+        });
 
-    // Add utils auto imports
-    addImports([
-      {
-        name: "getShikiHighlighter",
-        from: resolver.resolve("./runtime/utils")
-      },
-      {
-        name: "resolveShikiOptions",
-        from: resolver.resolve("./runtime/utils")
-      },
-      {
-        name: "useShikiHighlighted",
-        from: resolver.resolve("./runtime/utils")
-      }
-    ]);
-    addServerImports([
-      {
-        name: "getShikiHighlighter",
-        from: resolver.resolve("./runtime/utils")
-      },
-      {
-        name: "resolveShikiOptions",
-        from: resolver.resolve("./runtime/utils")
-      }
-    ]);
-
-    if (options.dynamic) {
-      addImports([
-        {
-          name: "loadShikiLanguages",
-          from: resolver.resolve("./runtime/utils")
-        }
-      ]);
-      addServerImports([
-        {
-          name: "loadShikiLanguages",
-          from: resolver.resolve("./runtime/utils")
-        }
-      ]);
-    }
-
-    // Shiki config
-    const bundledThemes = Array.from(
-      new Set([
-        ...(options.bundledThemes || []),
-        ...(typeof options.defaultTheme === "string"
-          ? [options.defaultTheme]
-          : Object.values(options.defaultTheme || {}))
-      ])
-    ).filter(Boolean);
-
-    const bundledLangs = Array.from(
-      new Set([...(options.bundledLangs || []), options.defaultLang])
-    ).filter(Boolean);
-
-    const highlightOptions: CodeToHastOptions =
-      !options.defaultTheme || typeof options.defaultTheme === "string"
-        ? {
-            lang: options.defaultLang || bundledLangs[0] || "javascript",
-            theme: options.defaultTheme || bundledThemes[0] || "min-dark",
-            ...options.highlightOptions
-          }
-        : {
-            lang: options.defaultLang || bundledLangs[0] || "javascript",
-            themes: {
-              ...options.defaultTheme,
-              light:
-                options.defaultTheme.light || bundledThemes[0] || "min-light",
-              dark:
-                options.defaultTheme.dark ||
-                bundledThemes[1] ||
-                bundledThemes[0] ||
-                "min-dark"
+        // Add utils auto imports
+        addImports([
+            {
+                name: "getShikiHighlighter",
+                from: resolver.resolve("./runtime/utils")
             },
-            ...options.highlightOptions
-          };
+            {
+                name: "resolveShikiOptions",
+                from: resolver.resolve("./runtime/utils")
+            },
+            {
+                name: "useShikiHighlighted",
+                from: resolver.resolve("./runtime/utils")
+            }
+        ]);
+        addServerImports([
+            {
+                name: "getShikiHighlighter",
+                from: resolver.resolve("./runtime/utils")
+            },
+            {
+                name: "resolveShikiOptions",
+                from: resolver.resolve("./runtime/utils")
+            }
+        ]);
 
-    const template = addTemplate({
-      filename: "shiki-options.mjs",
-      getContents: () => {
-        return /* js */ `
+        if (options.dynamic) {
+            addImports([
+                {
+                    name: "loadShikiLanguages",
+                    from: resolver.resolve("./runtime/utils")
+                }
+            ]);
+            addServerImports([
+                {
+                    name: "loadShikiLanguages",
+                    from: resolver.resolve("./runtime/utils")
+                }
+            ]);
+        }
+
+        // Shiki config
+        const bundledThemes = Array.from(
+            new Set([
+                ...(options.bundledThemes || []),
+                ...(typeof options.defaultTheme === "string"
+                    ? [options.defaultTheme]
+                    : Object.values(options.defaultTheme || {}))
+            ])
+        ).filter(Boolean);
+
+        const bundledLangs = Array.from(
+            new Set([...(options.bundledLangs || []), options.defaultLang])
+        ).filter(Boolean);
+
+        const highlightOptions: CodeToHastOptions =
+            !options.defaultTheme || typeof options.defaultTheme === "string"
+                ? {
+                    lang: options.defaultLang || bundledLangs[0] || "javascript",
+                    theme: options.defaultTheme || bundledThemes[0] || "min-dark",
+                    ...options.highlightOptions
+                }
+                : {
+                    lang: options.defaultLang || bundledLangs[0] || "javascript",
+                    themes: {
+                        ...options.defaultTheme,
+                        light:
+                            options.defaultTheme.light || bundledThemes[0] || "min-light",
+                        dark:
+                            options.defaultTheme.dark ||
+                            bundledThemes[1] ||
+                            bundledThemes[0] ||
+                            "min-dark"
+                    },
+                    ...options.highlightOptions
+                };
+
+        const template = addTemplate({
+            filename: "shiki-options.mjs",
+            getContents: () => {
+                return /* js */ `
 ${bundledThemes.map((theme) => /* js */ `import { default as _theme_${genSafeVariableName(theme)} } from "shiki/themes/${theme}.mjs";`).join("\n")}
 ${bundledLangs.map((lang) => /* js */ `import { default as _lang_${genSafeVariableName(lang!)} } from "shiki/langs/${lang}.mjs";`).join("\n")}
 
@@ -151,11 +151,11 @@ export const shikiOptions = {
   },
 };
 `;
-      }
-    });
+            }
+        });
 
-    nuxt.options.nitro.virtual ||= {};
-    nuxt.options.nitro.virtual["shiki-options.mjs"] = template.getContents;
-    nuxt.options.alias["shiki-options.mjs"] = template.dst;
-  }
+        nuxt.options.nitro.virtual ||= {};
+        nuxt.options.nitro.virtual["shiki-options.mjs"] = template.getContents;
+        nuxt.options.alias["shiki-options.mjs"] = template.dst;
+    }
 });
