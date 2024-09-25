@@ -1,5 +1,5 @@
 import { type MaybeRefOrGetter, ref, toValue, watch } from "vue";
-import type { BundledLanguage, CodeToHastOptions } from "shiki";
+import type { BundledLanguage } from "shiki";
 import { createHighlighter, createOptions, resolveOptions } from "./shiki";
 import type { HighlightOptions, ShikiHighlighter, UseHighlightOptions } from "./types";
 
@@ -39,9 +39,9 @@ export async function getShikiHighlighter(): Promise<ShikiHighlighter> {
  * const hast = shiki.codeToHast(`const hello = 'shiki'`, options)
  * ```
  */
-export async function resolveShikiOptions(highlightOptions: HighlightOptions = {}): Promise<CodeToHastOptions> {
+export async function resolveShikiOptions(options: Partial<HighlightOptions> = {}): Promise<HighlightOptions> {
     const shikiOptions = await createOptions("_options");
-    return resolveOptions(shikiOptions, highlightOptions);
+    return resolveOptions(shikiOptions, options);
 }
 
 /**

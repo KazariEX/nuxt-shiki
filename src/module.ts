@@ -3,10 +3,12 @@ import {
     addImports,
     addServerImports,
     addTemplate,
+    addTypeTemplate,
     createResolver,
     defineNuxtModule
 } from "@nuxt/kit";
 import { genSafeVariableName } from "knitwork";
+import { relative } from "pathe";
 import type { BundledLanguage, BundledTheme, CodeToHastOptions } from "shiki";
 import { name, version } from "../package.json";
 import type { HighlightOptions } from "./runtime/types";
@@ -30,7 +32,7 @@ export interface ModuleOptions {
     dynamic?: boolean;
 
     /** Additional highlight options */
-    highlightOptions?: HighlightOptions;
+    highlightOptions?: Partial<HighlightOptions>;
 
     /**
      * Alias of languages
@@ -137,25 +139,42 @@ export default defineNuxtModule<ModuleOptions>({
 
         const template = addTemplate({
             filename: "shiki-options.mjs",
-            getContents: () => {
-                return /* js */ `
+            getContents: () => /* js */ `
 ${bundledThemes.map((theme) => /* js */ `import { default as _theme_${genSafeVariableName(theme)} } from "shiki/themes/${theme}.mjs";`).join("\n")}
 ${bundledLangs.map((lang) => /* js */ `import { default as _lang_${genSafeVariableName(lang!)} } from "shiki/langs/${lang}.mjs";`).join("\n")}
 
 export const shikiOptions = {
-  highlight: ${JSON.stringify(highlightOptions, null, 2)},
-  core: {
-    themes: [${bundledThemes.map((theme) => `_theme_${genSafeVariableName(theme)}`).join(", ")}],
-    langs: [${bundledLangs.map((lang) => `_lang_${genSafeVariableName(lang!)}`).join(", ")}],
-    langAlias: ${JSON.stringify(options.langAlias)},
-  },
-};
-`;
-            }
+    highlight: ${JSON.stringify(highlightOptions, null, 2)},
+    core: {
+        themes: [${bundledThemes.map((theme) => `_theme_${genSafeVariableName(theme)}`).join(", ")}],
+        langs: [${bundledLangs.map((lang) => `_lang_${genSafeVariableName(lang!)}`).join(", ")}],
+        langAlias: ${JSON.stringify(options.langAlias)},
+    },
+};`
         });
 
         nuxt.options.nitro.virtual ||= {};
         nuxt.options.nitro.virtual["shiki-options.mjs"] = template.getContents;
         nuxt.options.alias["shiki-options.mjs"] = template.dst;
+
+        const typesPath = relative(
+            resolver.resolve(nuxt.options.rootDir, nuxt.options.buildDir, "module"),
+            resolver.resolve("runtime/types")
+        );
+        addTypeTemplate({
+            filename: "module/nuxt-shiki.d.ts",
+            getContents: () => /* js */`
+import type { HookResult } from "@nuxt/schema";
+import type { HighlightOptions } from "${typesPath}";
+
+declare module "#app" {
+    export interface RuntimeNuxtHooks {
+        "shiki:options": (ctx: {
+            options: HighlightOptions;
+            extend: (options: Partial<HighlightOptions>) => void;
+        }) => HookResult;
+    }
+}`
+        });
     }
 });

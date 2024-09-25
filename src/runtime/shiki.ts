@@ -1,3 +1,5 @@
+import defu from "defu";
+import { useNuxtApp } from "nuxt/app";
 import { unwrapTransformer } from "./transforms";
 import type { HighlightOptions, ShikiHighlighter, ShikiOptions } from "./types";
 
@@ -37,20 +39,27 @@ export const createHighlighter = cached<ShikiHighlighter>(
 export const createOptions = cached<ShikiOptions>(
     async () => {
         const { shikiOptions } = await _importShikiOptions();
+        const nuxt = useNuxtApp();
+        await nuxt.callHook("shiki:options", {
+            options: shikiOptions.highlight,
+            extend: (options) => {
+                // FIXME: type check is too slow
+                shikiOptions.highlight = (defu as any)(options, shikiOptions.highlight) as HighlightOptions;
+            }
+        });
         return shikiOptions;
     },
     createCacheStore
 );
 
-export function resolveOptions(shikiOptions: ShikiOptions, highlightOptions: HighlightOptions = {}) {
-    return {
-        ...shikiOptions.highlight,
-        ...highlightOptions,
-        transformers: [
-            ...((highlightOptions.unwrap) ? [unwrapTransformer] : []),
-            ...(highlightOptions.transformers || [])
-        ]
-    };
+export function resolveOptions(shikiOptions: ShikiOptions, highlightOptions: Partial<HighlightOptions> = {}) {
+    // FIXME: type check is too slow
+    const options = (defu as any)(highlightOptions, shikiOptions.highlight) as HighlightOptions;
+    const unwrap = highlightOptions.unwrap ?? shikiOptions.highlight.unwrap ?? false;
+    if (unwrap) {
+        (options.transformers ??= []).unshift(unwrapTransformer);
+    }
+    return options;
 }
 
 // ---- cache utils ---
