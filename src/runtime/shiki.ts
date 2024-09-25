@@ -5,52 +5,52 @@ const _importShikiCore = cached(() => import("shiki/core"));
 const _importShikiOptions = cached(() => import("shiki-options.mjs"));
 
 const createCacheStore = <T>(args: any[]) => {
-  /* eslint-disable no-multi-assign */
-  const globalCache: Record<string, CacheStore<T>> = ((
-    globalThis as any
-  ).__NUXT_SHIKI__ ??= {});
-  const key: string = args[0] || "default";
-  return (globalCache[key] ??= {});
+    /* eslint-disable no-multi-assign */
+    const globalCache: Record<string, CacheStore<T>> = ((
+        globalThis as any
+    ).__NUXT_SHIKI__ ??= {});
+    const key: string = args[0] || "default";
+    return (globalCache[key] ??= {});
 };
 
 export const createHighlighter = cached<ShikiHighlighter>(
-  async () => {
-    const [{ createHighlighterCore, createJavaScriptRegexEngine }, { shikiOptions }] = await Promise.all([
-      _importShikiCore(),
-      _importShikiOptions()
-    ]);
+    async () => {
+        const [{ createHighlighterCore, createJavaScriptRegexEngine }, { shikiOptions }] = await Promise.all([
+            _importShikiCore(),
+            _importShikiOptions()
+        ]);
 
-    const highlighter = (await createHighlighterCore({
-      ...shikiOptions.core,
-      engine: createJavaScriptRegexEngine()
-    })) as ShikiHighlighter;
+        const highlighter = (await createHighlighterCore({
+            ...shikiOptions.core,
+            engine: createJavaScriptRegexEngine()
+        })) as ShikiHighlighter;
 
-    highlighter.highlight = (code, highlightOptions) => {
-      return highlighter.codeToHtml(code, resolveOptions(shikiOptions, highlightOptions));
-    };
+        highlighter.highlight = (code, highlightOptions) => {
+            return highlighter.codeToHtml(code, resolveOptions(shikiOptions, highlightOptions));
+        };
 
-    return highlighter;
-  },
-  createCacheStore
+        return highlighter;
+    },
+    createCacheStore
 );
 
 export const createOptions = cached<ShikiOptions>(
-  async () => {
-    const { shikiOptions } = await _importShikiOptions();
-    return shikiOptions;
-  },
-  createCacheStore
+    async () => {
+        const { shikiOptions } = await _importShikiOptions();
+        return shikiOptions;
+    },
+    createCacheStore
 );
 
 export function resolveOptions(shikiOptions: ShikiOptions, highlightOptions: HighlightOptions = {}) {
-  return {
-    ...shikiOptions.highlight,
-    ...highlightOptions,
-    transformers: [
-      ...((highlightOptions.unwrap) ? [unwrapTransformer] : []),
-      ...(highlightOptions.transformers || [])
-    ]
-  };
+    return {
+        ...shikiOptions.highlight,
+        ...highlightOptions,
+        transformers: [
+            ...((highlightOptions.unwrap) ? [unwrapTransformer] : []),
+            ...(highlightOptions.transformers || [])
+        ]
+    };
 }
 
 // ---- cache utils ---
@@ -58,31 +58,31 @@ export function resolveOptions(shikiOptions: ShikiOptions, highlightOptions: Hig
 type Fn<T> = (...args: any[]) => T;
 type MaybePromise<T> = T | Promise<T>;
 interface CacheStore<T> {
-  promise?: T | Promise<T>;
-  value?: T;
+    promise?: T | Promise<T>;
+    value?: T;
 }
 function cached<T>(
-  fn: Fn<MaybePromise<T>>,
-  getStore?: (args: Parameters<typeof fn>) => CacheStore<T>
+    fn: Fn<MaybePromise<T>>,
+    getStore?: (args: Parameters<typeof fn>) => CacheStore<T>
 ): Fn<MaybePromise<T>> {
-  const _store: CacheStore<T> | undefined = getStore ? void 0 : {};
-  return function(...args: any[]) {
-    const store = _store || getStore!(args);
-    if (store.value !== void 0) {
-      return store.value;
-    }
-    if (store.promise) {
-      return store.promise;
-    }
-    const res = fn(...args);
-    if (res instanceof Promise) {
-      store.promise = res.then((value) => {
-        store.value = value;
-        delete store.promise;
-        return value;
-      });
-      return store.promise;
-    }
-    return store.promise!;
-  };
+    const _store: CacheStore<T> | undefined = getStore ? void 0 : {};
+    return function(...args: any[]) {
+        const store = _store || getStore!(args);
+        if (store.value !== void 0) {
+            return store.value;
+        }
+        if (store.promise) {
+            return store.promise;
+        }
+        const res = fn(...args);
+        if (res instanceof Promise) {
+            store.promise = res.then((value) => {
+                store.value = value;
+                delete store.promise;
+                return value;
+            });
+            return store.promise;
+        }
+        return store.promise!;
+    };
 }

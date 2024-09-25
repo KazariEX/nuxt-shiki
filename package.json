@@ -32,25 +32,25 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.13.0",
+    "@nuxt/kit": "^3.13.2",
     "knitwork": "^1.1.0",
-    "shiki": "^1.15.0"
+    "shiki": "^1.18.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.0.0",
-    "@nuxt/devtools": "^1.4.1",
-    "@nuxt/eslint-config": "^0.5.4",
-    "@nuxt/module-builder": "^0.8.3",
-    "@nuxt/schema": "^3.13.0",
-    "@nuxt/test-utils": "^3.14.1",
-    "@types/node": "^22.5.1",
-    "@zinkawaii/eslint-config": "^0.1.5",
+    "@antfu/eslint-config": "^3.7.1",
+    "@nuxt/devtools": "^1.5.1",
+    "@nuxt/eslint-config": "^0.5.7",
+    "@nuxt/module-builder": "~0.6.0",
+    "@nuxt/schema": "^3.13.2",
+    "@nuxt/test-utils": "^3.14.2",
+    "@types/node": "^22.7.0",
+    "@zinkawaii/eslint-config": "^0.1.7",
     "automd": "^0.3.8",
-    "changelogen": "^0.5.5",
-    "eslint": "^9.9.1",
-    "nuxt": "^3.13.0",
+    "changelogen": "^0.5.7",
+    "eslint": "^9.11.1",
+    "nuxt": "^3.13.2",
     "prettier": "^3.3.3",
     "unbuild": "^2.0.0",
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.1"
   }
 }

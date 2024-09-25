@@ -1,5 +1,5 @@
-import type { BundledLanguage, CodeToHastOptions } from "shiki";
 import { type MaybeRefOrGetter, ref, toValue, watch } from "vue";
+import type { BundledLanguage, CodeToHastOptions } from "shiki";
 import { createHighlighter, createOptions, resolveOptions } from "./shiki";
 import type { HighlightOptions, ShikiHighlighter, UseHighlightOptions } from "./types";
 
@@ -26,7 +26,7 @@ import type { HighlightOptions, ShikiHighlighter, UseHighlightOptions } from "./
  * ```
  */
 export async function getShikiHighlighter(): Promise<ShikiHighlighter> {
-  return createHighlighter("_instance");
+    return createHighlighter("_instance");
 }
 
 /**
@@ -40,8 +40,8 @@ export async function getShikiHighlighter(): Promise<ShikiHighlighter> {
  * ```
  */
 export async function resolveShikiOptions(highlightOptions: HighlightOptions = {}): Promise<CodeToHastOptions> {
-  const shikiOptions = await createOptions("_options");
-  return resolveOptions(shikiOptions, highlightOptions);
+    const shikiOptions = await createOptions("_options");
+    return resolveOptions(shikiOptions, highlightOptions);
 }
 
 /**
@@ -56,41 +56,41 @@ export async function resolveShikiOptions(highlightOptions: HighlightOptions = {
  * ```
  */
 export async function useShikiHighlighted(
-  code: MaybeRefOrGetter<string | undefined>,
-  options: UseHighlightOptions = {}
+    code: MaybeRefOrGetter<string | undefined>,
+    options: UseHighlightOptions = {}
 ) {
-  if ("themes" in options && !options.themes) {
-    delete options.themes;
-  }
+    if ("themes" in options && !options.themes) {
+        delete options.themes;
+    }
 
-  if (import.meta.server) {
-    const highlighter = await getShikiHighlighter();
-    return ref(highlighter.highlight(toValue(code) || "", {
-      ...options,
-      lang: toValue(options.lang),
-      theme: toValue(options.theme)
-    }));
-  }
+    if (import.meta.server) {
+        const highlighter = await getShikiHighlighter();
+        return ref(highlighter.highlight(toValue(code) || "", {
+            ...options,
+            lang: toValue(options.lang),
+            theme: toValue(options.theme)
+        }));
+    }
 
-  const highlighted = ref(options.highlighted || "");
-  const immediate = !highlighted.value;
+    const highlighted = ref(options.highlighted || "");
+    const immediate = !highlighted.value;
 
-  watch([
-    () => toValue(code),
-    () => toValue(options.lang),
-    () => toValue(options.theme)
-  ], async ([_code, lang, theme]) => {
-    const highlighter = await getShikiHighlighter();
-    highlighted.value = highlighter.highlight(_code || "", {
-      ...options,
-      lang,
-      theme
+    watch([
+        () => toValue(code),
+        () => toValue(options.lang),
+        () => toValue(options.theme)
+    ], async ([_code, lang, theme]) => {
+        const highlighter = await getShikiHighlighter();
+        highlighted.value = highlighter.highlight(_code || "", {
+            ...options,
+            lang,
+            theme
+        });
+    }, {
+        immediate
     });
-  }, {
-    immediate
-  });
 
-  return highlighted;
+    return highlighted;
 }
 
 /**
@@ -104,18 +104,18 @@ export async function useShikiHighlighted(
  * ```
  */
 export async function loadShikiLanguages(...langs: string[]) {
-  const { bundledLanguages } = await import("shiki/langs");
-  const highlighter = await getShikiHighlighter();
-  const loadedLanguages = highlighter.getLoadedLanguages();
-  await Promise.all(
-    langs
-      .filter((lang) => !loadedLanguages.includes(lang))
-      .map((lang) => bundledLanguages[lang as BundledLanguage])
-      .filter(Boolean)
-      .map((dynamicLang) => new Promise<void>((resolve) => {
-        dynamicLang().then((loadedLang) => {
-          highlighter.loadLanguage(loadedLang).then(() => resolve());
-        });
-      }))
-  );
+    const { bundledLanguages } = await import("shiki/langs");
+    const highlighter = await getShikiHighlighter();
+    const loadedLanguages = highlighter.getLoadedLanguages();
+    await Promise.all(
+        langs
+            .filter((lang) => !loadedLanguages.includes(lang))
+            .map((lang) => bundledLanguages[lang as BundledLanguage])
+            .filter(Boolean)
+            .map((dynamicLang) => new Promise<void>((resolve) => {
+                dynamicLang().then((loadedLang) => {
+                    highlighter.loadLanguage(loadedLang).then(() => resolve());
+                });
+            }))
+    );
 }

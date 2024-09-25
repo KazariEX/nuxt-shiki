@@ -1,23 +1,23 @@
-import type { MaybeRefOrGetter } from "vue";
 import type { BundledLanguage, BundledTheme, CodeToHastOptions, HighlighterCore } from "shiki";
 import type { HighlighterCoreOptions } from "shiki/core";
+import type { MaybeRefOrGetter } from "vue";
 
 export type HighlightOptions = Partial<CodeToHastOptions> & {
-  /** unwrap pre > code to code */
-  unwrap?: boolean;
+    /** unwrap pre > code to code */
+    unwrap?: boolean;
 };
 
 export type UseHighlightOptions = Omit<HighlightOptions, "lang" | "theme"> & {
-  highlighted?: string;
-  lang?: MaybeRefOrGetter<BundledLanguage | undefined>;
-  theme?: MaybeRefOrGetter<BundledTheme | undefined>;
+    highlighted?: string;
+    lang?: MaybeRefOrGetter<BundledLanguage | undefined>;
+    theme?: MaybeRefOrGetter<BundledTheme | undefined>;
 };
 
 export type ShikiHighlighter = HighlighterCore & {
-  highlight: (code: string, options: HighlightOptions) => string;
+    highlight: (code: string, options: HighlightOptions) => string;
 };
 
 export interface ShikiOptions {
-  core: HighlighterCoreOptions;
-  highlight: CodeToHastOptions;
+    core: HighlighterCoreOptions;
+    highlight: CodeToHastOptions;
 }

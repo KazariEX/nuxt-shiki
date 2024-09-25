@@ -8,7 +8,7 @@ export default antfu({
   stylistic: {
     quotes: "double",
     semi: true,
-    indent: 2
+    indent: 4
   },
   rules: {
     ...zin.standard,

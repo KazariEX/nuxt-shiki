@@ -6,8 +6,8 @@ import {
   createResolver,
   defineNuxtModule
 } from "@nuxt/kit";
-import type { BundledLanguage, BundledTheme, CodeToHastOptions } from "shiki";
 import { genSafeVariableName } from "knitwork";
+import type { BundledLanguage, BundledTheme, CodeToHastOptions } from "shiki";
 import { name, version } from "../package.json";
 import type { HighlightOptions } from "./runtime/types";
 
