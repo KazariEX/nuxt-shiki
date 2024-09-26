@@ -1,5 +1,5 @@
 import defu from "defu";
-import { useNuxtApp } from "nuxt/app";
+import type { NuxtApp } from "nuxt/app";
 import { unwrapTransformer } from "./transforms";
 import type { HighlightOptions, ShikiHighlighter, ShikiOptions } from "./types";
 
@@ -37,10 +37,9 @@ export const createHighlighter = cached<ShikiHighlighter>(
 );
 
 export const createOptions = cached<ShikiOptions>(
-    async () => {
+    async (_, nuxtApp: NuxtApp) => {
         const { shikiOptions } = await _importShikiOptions();
-        const nuxt = useNuxtApp();
-        await nuxt.callHook("shiki:options", {
+        await nuxtApp.callHook("shiki:options", {
             options: shikiOptions.highlight,
             extend: (options) => {
                 // FIXME: type check is too slow

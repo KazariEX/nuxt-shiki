@@ -1,6 +1,7 @@
 import {
     addComponent,
     addImports,
+    addPlugin,
     addServerImports,
     addTemplate,
     addTypeTemplate,
@@ -101,6 +102,11 @@ export default defineNuxtModule<ModuleOptions>({
             ]);
         }
 
+        // Add plugins
+        addPlugin({
+            src: resolver.resolve("./runtime/plugin/init")
+        });
+
         // Shiki config
         const bundledThemes = Array.from(
             new Set([
@@ -161,8 +167,9 @@ export const shikiOptions = {
             resolver.resolve(nuxt.options.rootDir, nuxt.options.buildDir, "module"),
             resolver.resolve("runtime/types")
         );
+
         addTypeTemplate({
-            filename: "module/nuxt-shiki.d.ts",
+            filename: "types/nuxt-shiki.d.ts",
             getContents: () => /* js */`
 import type { HookResult } from "@nuxt/schema";
 import type { HighlightOptions } from "${typesPath}";
