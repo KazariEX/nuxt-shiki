@@ -4,10 +4,10 @@ import { unwrapTransformer } from "./transforms";
 import type { HighlightOptions, ShikiHighlighter, ShikiOptions } from "./types";
 
 const _importShikiCore = cached(() => import("shiki/core"));
+const _importShikiEngine = cached(() => import("shiki/engine/javascript"));
 const _importShikiOptions = cached(() => import("shiki-options.mjs"));
 
 const createCacheStore = <T>(args: any[]) => {
-    /* eslint-disable no-multi-assign */
     const globalCache: Record<string, CacheStore<T>> = ((
         globalThis as any
     ).__NUXT_SHIKI__ ??= {});
@@ -17,8 +17,13 @@ const createCacheStore = <T>(args: any[]) => {
 
 export const createHighlighter = cached<ShikiHighlighter>(
     async () => {
-        const [{ createHighlighterCore, createJavaScriptRegexEngine }, { shikiOptions }] = await Promise.all([
+        const [
+            { createHighlighterCore },
+            { createJavaScriptRegexEngine },
+            { shikiOptions }
+        ] = await Promise.all([
             _importShikiCore(),
+            _importShikiEngine(),
             _importShikiOptions()
         ]);
 
